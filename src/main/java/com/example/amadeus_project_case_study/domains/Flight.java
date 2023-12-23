@@ -16,13 +16,14 @@ import java.time.LocalDateTime;
 public class Flight {
     @Column
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long ID;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "departureAirportId", referencedColumnName = "id")
     private Airport departureAirport;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "arrivalAirportId", referencedColumnName = "id")
     private Airport arrivalAirport;
 
