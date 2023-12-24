@@ -49,4 +49,5 @@ public class FlightAPI {
         return optionalFlights.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
 
     }
+
 }
