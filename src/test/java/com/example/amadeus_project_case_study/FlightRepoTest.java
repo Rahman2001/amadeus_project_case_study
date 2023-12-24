@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class FlightRepoTest {
@@ -26,17 +27,30 @@ public class FlightRepoTest {
 
         Airport depAirport = Airport.builder().ID(1L).city("Ankara").build();
         Airport arrAirport = Airport.builder().ID(2L).city("Istanbul").build();
+        Flight retFlight = Flight.builder()
+                .departureAirport(arrAirport)
+                .arrivalAirport(depAirport)
+                .departureTime(depTime.plusMonths(2))
+                .price(255)
+                .build();
+        this.flightRepo.save(retFlight);
+        retFlight = this.flightRepo.getFlightsBy(retFlight.getDepartureAirport().getID(),
+                retFlight.getArrivalAirport().getID(), retFlight.getDepartureTime()).get(0);
+
         Flight flight = Flight.builder()
                 .departureAirport(depAirport)
                 .arrivalAirport(arrAirport)
                 .departureTime(depTime)
                 .returnTime(arrTime)
+                .returnFlight(retFlight)
                 .price(255)
                 .build();
         this.flightRepo.save(flight);
         List<Flight> flightList = this.flightRepo.getFlightsBy(flight.getDepartureAirport().getID(),
                 flight.getArrivalAirport().getID(), flight.getDepartureTime(), flight.getReturnTime());
         assertFalse(flightList.isEmpty());
+        flight = flightList.get(0);
+        assertTrue(flight.getReturnFlight() != null && flight.getReturnFlight().getID() > 0);
 
     }
 }

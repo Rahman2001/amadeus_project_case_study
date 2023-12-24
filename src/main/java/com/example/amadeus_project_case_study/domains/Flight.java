@@ -35,4 +35,8 @@ public class Flight {
 
     @Column
     private Integer price;
+
+    @ManyToOne
+    @JoinColumn(name = "returnFlightId", referencedColumnName = "id")
+    private Flight returnFlight;
 }
